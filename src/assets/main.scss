@@ -1,0 +1,21 @@
+@import "./fonts.scss";
+@import "./normalize.scss";
+@import "./variables.scss";
+
+#app {
+  padding: 25px;
+  margin: 0 auto;
+  max-width: 1080px;
+  font-style: normal;
+  color: aliceblue;
+  background-color: $night;
+}
+
+a,
+button {
+  border: none;
+  outline: none;
+  color: white;
+  text-decoration: none;
+  background-color: transparent;
+}
