@@ -22,11 +22,7 @@ export default {
   },
   data(): State {
     return {
-      todos: [
-        { id: 0, text: "Learn the basics of Vue", completed: true },
-        { id: 1, text: "Learn the basics of Typescript", completed: false },
-        { id: 2, text: "Subscribe to the channel", completed: false },
-      ],
+      todos: [],
       activeFilter: "All",
     };
   },
