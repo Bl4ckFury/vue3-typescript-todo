@@ -10,12 +10,6 @@ interface State {
   isFormVisible: boolean;
 }
 
-interface State {
-  error: boolean;
-  inputText: string;
-  isFormVisible: boolean;
-}
-
 export default {
   components: {
     CloseIcon,
@@ -29,53 +23,55 @@ export default {
   },
   data(): State {
     return {
-      error: false,
+      error: "",
       inputText: "",
       isFormVisible: false,
     };
   },
-  async mounted() {
-    const data = await localStorage.getItem("todos");
-    data ? (this.todo = JSON.parse(data)) : null;
+  mounted() {
+    try {
+      const todos = JSON.parse(localStorage.getItem('todos'))
+
+      this.$emit("initTodos", todos);
+    } catch(e) {
+      this.todo = []
+    }
   },
   methods: {
     showForm() {
       this.isFormVisible = true;
     },
     closeForm() {
-      (this.error = false), (this.isFormVisible = false);
+      (this.error = ""), (this.isFormVisible = false);
       this.inputText = "";
     },
-    addTodo() {
-      if (this.inputText != "" || this.inputText.length >= 3) {
-        this.$emit("addTodo", {
-          id: Date.now(),
-          text: this.inputText,
-          completed: false,
-        });
-        this.inputText = "";
-        localStorage.setItem("todos", JSON.stringify(this.todo));
-      } else {
-        this.error = true;
+    addTodoItem() {
+      if (this.inputText === "" || this.inputText.length <= 3) {
+        return this.error = "Заполните поле";
       }
+
+      this.$emit("addTodo", {
+        id: Date.now(),
+        text: this.inputText,
+        completed: false,
+      });
+      this.inputText = "";
+      this.error = "";
     },
-  },
-  emits: {
-    addTodo: (todo: Todo) => todo,
-  },
+  }
 };
 </script>
 
 <template>
   <section class="add-todo">
-    <span v-show="error" class="add-todo__error">Заполните поле</span>
+    <span class="add-todo__error">{{ error }}</span>
     <form v-if="isFormVisible" class="add-todo__form" @submit.prevent="addTodo">
-      <button class="close-button" @click="closeForm">
-        <CloseIcon />
-      </button>
       <div class="text-input text-input--focus">
         <input v-model="inputText" class="input" />
-        <button @click="addTodo" class="button button--filled">
+        <button class="close-button" @click="closeForm">
+          <CloseIcon />
+        </button>
+        <button @click="addTodoItem" class="button button--filled">
           Добавить задачу
         </button>
       </div>

@@ -1,6 +1,7 @@
 <script lang="ts">
 import AppListItem from "./AppListItem.vue";
 import Todo from "../../models/Item.interface";
+import type { PropeType } from "vue";
 
 export default {
   components: {

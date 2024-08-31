@@ -26,6 +26,14 @@ export default {
       activeFilter: "All",
     };
   },
+  watch: {
+    todos: {
+      handler(newValue, oldValue) {
+        localStorage.setItem("todos", JSON.stringify(newValue));
+      },
+      deep: true
+    }
+  },
   computed: {
     filterdTodos(): Todo[] {
       switch (this.activeFilter) {
@@ -52,6 +60,9 @@ export default {
     },
   },
   methods: {
+    initTodos(todos: Todo[]) {
+      this.todos = todos;
+    },
     toggleTodo(id: number) {
       const targetTodo = this.todos.find((todo) => todo.id === id);
 
@@ -84,7 +95,7 @@ export default {
         @toggleTodo="toggleTodo"
         @removeTodo="removeTodo"
       />
-      <AppAddTask :todo="todos" @add-todo="addTodo" />
+      <AppAddTask :todo="todos" @add-todo="addTodo" @init-todos="initTodos" />
     </main>
 
     <footer class="app-footer">
